@@ -4,6 +4,11 @@ Author: Harry He
 
 ## Project Description
 
+
+https://user-images.githubusercontent.com/69978107/192163855-6ea7f9d5-ab31-4092-bd8b-f6e9a563dced.mp4
+
+A video demonstration of how the game is played.
+
 The application is a game where the user is able to play chess against another player, or a computer. All of the technologies used in the game are apart of the Java Standard Library, and there are no external libraries that were used in the creation of the game. In the game some of the features of the Java Standard Library used were graphics, threading, and text file editing.
 
 ## Computational Techniques
