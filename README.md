@@ -4,8 +4,7 @@ Author: Harry He
 
 ## Project Description
 
-
-https://user-images.githubusercontent.com/69978107/192163855-6ea7f9d5-ab31-4092-bd8b-f6e9a563dced.mp4
+https://user-images.githubusercontent.com/69978107/192169435-f43a8ce4-6b7d-4afd-b8a4-db628a36b787.mp
 
 A video demonstration of how the game is played.
 Harry (628) vs Harry's AI (???)
