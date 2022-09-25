@@ -56,6 +56,13 @@ public class Opponent implements Runnable {
 
     double[][] controlValue;
 
+    double[][] pawnSquareTable = {{0, 0, 0, 0, 0, 0, 0, 0}, {0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5}, {0.1, 0.1, 0.2, 0.3, 0.3, 0.2, 0.1, 0.1}, {0.05, 0.05, 0.1, 0.25, 0.25, 0.1, 0.05, 0.05}, {0, 0, 0, 0.2, 0.2, 0, 0, 0}, {0.05, -0.05, -0.1, 0, 0, -0.1, -0.05, 0.05}, {0.05, 0.1, 0.1, -0.2, -0.2, 0.1, 0.1, 0.05}, {0, 0, 0, 0, 0, 0, 0, 0}};
+    double[][] knightSquareTable = {{-0.5, -0.4, -0.3, -0.3, -0.3, -0.3, -0.4, -0.5}, {-0.4, -0.2, 0, 0, 0, 0, -0.2, -0.4}, {-0.3, 0, 0.1, 0.15, 0.15, 0.1, 0, -0.3}, {-0.3, 0.05, 0.15, 0.2, 0.2, 0.15, 0.05, -0.3}, {-0.3, 0, 0.15, 0.2, 0.2, 0.15, 0, -0.3}, {-0.3, 0.05, 0.1, 0.15, 0.15, 0.1, 0.05, -0.3}, {-0.4, -0.2, 0, 0.05, 0.05, 0, -0.2, -0.4}, {-0.5, -0.4, -0.3, -0.3, -0.3, -0.3, -0.4, -0.5}};
+    double[][] bishopSquareTable = {{-0.2, -0.1, -0.1, -0.1, -0.1, -0.1, -0.1, -0.2}, {-0.1, 0, 0, 0, 0, 0, 0, -0.1}, {-0.1, 0, 0.05, 0.1, 0.1, 0.05, 0, -0.1}, {-0.1, 0.05, 0.05, 0.1, 0.1, 0.05, 0.05, -0.1}, {-0.1, 0, 0.1, 0.1, 0.1, 0.1, 0, -0.1}, {-0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, -0.1}, {-0.1, 0.05, 0, 0, 0, 0, 0.05, -0.1}, {-0.2, -0.1, -0.1, -0.1, -0.1, -0.1, -0.1, -0.2}};
+    double[][] rookSquareTable = {{0, 0, 0, 0, 0, 0, 0, 0}, {0.05, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.05}, {-0.05, 0, 0, 0, 0, 0, 0, -0.05}, {-0.05, 0, 0, 0, 0, 0, 0, -0.05}, {-0.05, 0, 0, 0, 0, 0, 0, -0.05}, {-0.05, 0, 0, 0, 0, 0, 0, -0.05}, {-0.05, 0, 0, 0, 0, 0, 0, -0.05}, {0, 0, 0, 0.05, 0.05, 0, 0, 0}};
+    double[][] queenSquareTable = {{-0.2, -0.1, -0.1, -0.05, -0.05, -0.1, -0.1, -0.2}, {-0.1, 0, 0, 0, 0, 0, 0, -0.1}, {-0.1, 0, 0.05, 0.05, 0.05, 0.05, 0, -0.1}, {-0.05, 0, 0.05, 0.05, 0.05, 0.05, 0, -0.05}, {0, 0, 0.05, 0.05, 0.05, 0.05, 0, -0.05}, {-0.1, 0.05, 0.05, 0.05, 0.05, 0.05, 0, -0.1}, {-0.1, 0, 0.05, 0, 0, 0, 0, -0.1}, {-0.2, -0.1, -0.1, -0.05, -0.05, -0.1, -0.1, -0.2}};
+    double[][] kingSquareTable = {{-0.3, -0.4, -0.4, -0.5, -0.5, -0.4, -0.4, -0.3}, {-0.3, -0.4, -0.4, -0.5, -0.5, -0.4, -0.4, -0.3}, {-0.3, -0.4, -0.4, -0.5, -0.5, -0.4, -0.4, -0.3}, {-0.3, -0.4, -0.4, -0.5, -0.5, -0.4, -0.4, -0.3}, {-0.2, -0.3, -0.3, -0.4, -0.4, -0.3, -0.3, -0.2}, {-0.1, -0.2, -0.2, -0.2, -0.2, -0.2, -0.2, -0.1}, {0.2, 0.2, 0, 0, 0, 0, 0.2, 0.2}, {0.2, 0.3, 0.1, 0, 0, 0.1, 0.3, 0.2}};
+
     private int search;
 
     private final double defaultMax = 1e12;
@@ -70,7 +77,7 @@ public class Opponent implements Runnable {
         this.handler = handler;
         this.board = board;
 
-        this.searchDepth = 3;
+        this.searchDepth = 2;
 
         this.whiteSide = whiteSide;
         this.personality = personality;
@@ -229,7 +236,7 @@ public class Opponent implements Runnable {
     private Move SearchHelper(int depth, boolean whitePersp,
             boolean isMaximizingPlayer) {
         tt.clear();
-        
+
         ArrayList<Quad> possibleMoves = new ArrayList<>();
         if (whitePersp) {
             possibleMoves = board.whiteValidMoves;
@@ -315,16 +322,16 @@ public class Opponent implements Runnable {
             boolean isMaximizingPlayer, double alpha, double beta) {
         if (depth <= 0) {
             //double moveScore = evaluateBoard(whitePersp);
-            double moveScore = QuiesenceSearch(plyFromRoot + 1, whitePersp, 
+            double moveScore = QuiesenceSearch(plyFromRoot + 1, whitePersp,
                     isMaximizingPlayer, alpha, beta);
             return moveScore;
         }
-        
+
         double ttVal = tt.LookupEvaluation(depth, plyFromRoot, alpha, beta);
-        if(ttVal != tt.lookupFailed){
+        if (ttVal != tt.lookupFailed) {
             return ttVal;
         }
-        
+
         double bestMoveValue = 0;
         if (isMaximizingPlayer) {
             bestMoveValue = this.defaultMin;
@@ -374,7 +381,7 @@ public class Opponent implements Runnable {
                     evoPossible[3] = 10;
                 }
             }
-            
+
             for (int j = 0; j < evoPossible.length; j++) {
                 this.search++;
                 board.properMove(p, move.dRow, move.dCol, evoPossible[j], true);// Recursive case
@@ -447,7 +454,7 @@ public class Opponent implements Runnable {
         if (beta <= alpha) {
             return bestMoveValue;
         }
-        
+
         ArrayList<Quad> unfilteredMoves = new ArrayList<>();
         if (whitePersp) {
             unfilteredMoves = board.whiteValidMoves;
@@ -457,14 +464,13 @@ public class Opponent implements Runnable {
         // Capture moves are will be recognized
         // until there are no more remaining
         ArrayList<Quad> possibleMoves = new ArrayList<>();
-        for(int i = 0; i < unfilteredMoves.size(); i++){
+        for (int i = 0; i < unfilteredMoves.size(); i++) {
             Quad move = unfilteredMoves.get(i);
-            if(board.chessBoard[move.dRow][move.dCol] > 0){
+            if (board.chessBoard[move.dRow][move.dCol] > 0) {
                 possibleMoves.add(move);
             }
         }
         Collections.sort(possibleMoves, moveSorter);
-        
 
         boolean exit = false;
         for (int i = 0; i < possibleMoves.size() && !exit; i++) {
@@ -769,6 +775,7 @@ public class Opponent implements Runnable {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 totalEvaluation += getPieceValue(board.chessBoard[i][j]);
+                totalEvaluation += getSquareValue(board.chessBoard[i][j], i, j);
             }
         }
 //        totalEvaluation += KingEval(whitePersp);
@@ -914,6 +921,39 @@ public class Opponent implements Runnable {
             case 11:
             case 12:
                 return multi * kingValue;
+            default:
+                break;
+        }
+
+        return 0;
+    }
+
+    private double getSquareValue(int pieceType, int row, int col) {
+        int multi = 0;
+        if (pieceType % 2 == 1) {
+            multi = 1;
+        } else if (pieceType % 2 == 0) {
+            multi = -1;
+        }
+        switch (pieceType) {
+            case 1:
+            case 2:
+                return multi * pawnSquareTable[row][col];
+            case 3:
+            case 4:
+                return multi * bishopSquareTable[row][col];
+            case 5:
+            case 6:
+                return multi * knightSquareTable[row][col];
+            case 7:
+            case 8:
+                return multi * rookSquareTable[row][col];
+            case 9:
+            case 10:
+                return multi * queenSquareTable[row][col];
+            case 11:
+            case 12:
+                return multi * kingSquareTable[row][col];
             default:
                 break;
         }
